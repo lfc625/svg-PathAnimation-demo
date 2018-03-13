@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="copyright" content="Copyright © 2013 Adobe Systems Incorporated. All rights reserved.">
+
+
+        <title>demo</title>
+        
+        <script src="snap.svg.js"></script>
+        <script>
+        window.onload = function () {
+            var g = Snap();
+            g.attr({
+                viewBox: [0, 0, 1000, 600]
+            });
+
+            Snap.load("testPath.svg", function (f) {
+            	function getShift(dot) {
+                    return "t" +  (dot.x-167) + "," +(dot.y-40);
+                }
+                var gr = f.select("g"),
+                	pth = f.select("#pathlist"),
+                	ball = f.select("#redBall"),
+                	content = ball.select("#textContent"),
+                	goball = ball.select("#goBall"),
+                    top = g.g();
+                top.add(gr);
+ 				len = Snap.path.getTotalLength(pth.attr("d"));
+ 				ball.click (function () {
+				Snap.animate(0, len, function (l) {
+                        /*// Safari bug workaround: forcing redraw
+                        g.attr({width: 100 + (flag = !flag ? 1e-5 : 0) + "%"});*/
+                        //
+                        var dot = pth.getPointAtLength(l);
+                        
+                        ball.attr({
+                            transform: "t" + [dot.x, dot.y] +
+                                       "r" + (dot.alpha - 90)
+                        });
+
+                        ball.attr({
+                            transform: getShift(dot)
+                        });
+                    }, 10000);
+            });
+        });
+    };
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>
